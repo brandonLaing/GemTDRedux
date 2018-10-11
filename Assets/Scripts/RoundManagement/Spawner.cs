@@ -22,7 +22,7 @@ public class Spawner : MonoBehaviour
 
   private void Update()
   {
-    if (meep)
+    if (meep || Input.GetKeyDown(KeyCode.S))
     {
       SpawnAI(basicAIPrefab);
       meep = false;

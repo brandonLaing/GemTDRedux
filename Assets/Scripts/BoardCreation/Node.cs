@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu]
 public class Node : ScriptableObject
@@ -9,9 +10,16 @@ public class Node : ScriptableObject
   public List<NodeConnection> connections = new List<NodeConnection>();
   public Transform tileTransform;
 
+  private TileGenerator tileGen;
+
   public void SetNodeTransform(Transform tileTransform)
   {
     this.tileTransform = tileTransform;
+  }
+
+  public void SetNodeTileGen(TileGenerator tileGen)
+  {
+    this.tileGen = tileGen;
   }
 
   public void MakeNewConnection(Node connection, bool connected)
@@ -38,15 +46,42 @@ public class Node : ScriptableObject
     // foreach node connected this one
     foreach (NodeConnection connection in connections)
     {
+      connection.connected = false;
+
       // then for each connection to the connected nodes
       foreach (NodeConnection connectionConnection in connection.node.connections)
       {
         if (connectionConnection.node == this)
         {
           connectionConnection.connected = false;
+          UpdateGizmoOnTileGen(connection.node, connectionConnection.node, false);
         }
       }
     }
+  }
+
+  public void UnBlockThisTile()
+  {
+    foreach (NodeConnection connection in connections)
+    {
+      connection.connected = true;
+
+      // then for each connection to the connected nodes
+      foreach (NodeConnection connectionConnection in connection.node.connections)
+      {
+        if (connectionConnection.node == this)
+        {
+          connectionConnection.connected = true;
+          UpdateGizmoOnTileGen(connection.node, connectionConnection.node, true);
+        }
+      }
+
+    }
+  }
+
+  private void UpdateGizmoOnTileGen(Node node1, Node node2, bool connectionState)
+  {
+    tileGen.UpdateConnectionBetween(node1, node2, connectionState);
   }
 }
 

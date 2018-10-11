@@ -44,6 +44,7 @@ public class TileGenerator : MonoBehaviour
         TileInfo tileInfoComp = newTile.GetComponent<TileInfo>();
         tileInfoComp.tileNode = ScriptableObject.CreateInstance<Node>();
         tileInfoComp.tileNode.SetNodeTransform(newTile.transform);
+        tileInfoComp.tileNode.SetNodeTileGen(this);
         tileInfoComp.tileNode.name = "Node: " + i;
         allNodes.Insert(0, tileInfoComp.tileNode);
         i++;
@@ -136,17 +137,17 @@ public class TileGenerator : MonoBehaviour
     }
   }
 
-  public void UpdateConnectionBetween(Node node1, Node node2, bool connected)
+  public void UpdateConnectionBetween(Node node1, Node node2, bool connectionState)
   {
     foreach (GizmoConnections connection in connections)
     {
       if (node1 == connection.startNode && node2 == connection.endNode)
       {
-        connection.conneted = connected;
+        connection.conneted = connectionState;
       }
       else if (node2 == connection.startNode && node1 == connection.endNode)
       {
-        connection.conneted = connected;
+        connection.conneted = connectionState;
       }
     }
   }

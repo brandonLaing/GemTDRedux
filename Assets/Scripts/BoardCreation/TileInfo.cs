@@ -23,6 +23,7 @@ public class TileInfo : MonoBehaviour
       {
         tower = Instantiate(towerToBuild, towerSpawnLocation.position, Quaternion.identity, this.transform);
         slotOpen = false;
+        tileNode.BlockThisTile();
       }
     }
     else
@@ -40,6 +41,7 @@ public class TileInfo : MonoBehaviour
       Destroy(tower);
       slotOpen = true;
       tower = null;
+      tileNode.UnBlockThisTile();
     }
     else
     {
